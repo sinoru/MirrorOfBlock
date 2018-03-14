@@ -17,7 +17,8 @@
         <div class="mobcb-controls">
           <div class="mobcb-bottom-message"></div>
           <button class="mobcb-close btn">닫기</button>
-          <button disabled class="mobcb-execute btn caution-btn">차단</button>
+          <button disabled class="mobcb-execute btn caution-btn" title="위 사용자를 실제로 차단합니다.">차단</button>
+          <button class="mobcb-toggle-blur btn" title="캡처시 사용자를 가리고 싶을 때 사용해주세요.">가리기</button>
         </div>
       </div>
     </div>
@@ -59,6 +60,9 @@
       list-style: none;
       line-height: 150%;
     }
+    .mobcb-dialog.mobcb-blur .mobcb-user {
+      filter: blur(5px) saturate(0%);
+    }
     .mobcb-controls {
       margin-top: 5px;
     }
@@ -66,8 +70,8 @@
       float: left;
       padding: 10px 0;
     }
-    .mobcb-controls .btn ~ .btn {
-      margin: 0 5px;
+    .mobcb-controls .btn {
+      margin-left: 5px;
     }
   `
   function restoreConsole () {
@@ -236,6 +240,10 @@
           dialogTitle.text() + ' (슬로우 모드)'
         )
       }
+      progressUI.on('click', '.mobcb-toggle-blur', event => {
+        event.preventDefault()
+        progressUI.find('.mobcb-dialog').toggleClass('mobcb-blur')
+      })
       progressUI.on('click', '.mobcb-close', event => {
         event.preventDefault()
         this.close()
@@ -282,6 +290,7 @@
           userPrefix = '[Skip] '
         }
         const item = $('<li>')
+          .addClass('mobcb-user')
         const link = $('<a>')
           .attr('data-user-id', userId)
           .attr('href', `https://twitter.com/${userName}`)
